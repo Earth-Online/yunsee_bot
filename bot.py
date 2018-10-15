@@ -1,6 +1,7 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from main import query,QueryException
+from json.decoder import JSONDecodeError
 import logging
 import json
 import os
@@ -31,7 +32,15 @@ def _query(bot, update, args):
     except QueryException as e:
         bot.send_message(chat_id=update.message.chat_id, text='已推送云端检测，请几分钟后再查询')
         return
-    bot.send_message(chat_id=update.message.chat_id, text=json.dumps(ret))
+    except JSONDecodeError as e:
+         bot.send_message(chat_id=update.message.chat_id, text='查询错误，请几分钟后再查询')
+         return
+    text = "" 
+    for data in ret:
+        for key,value in data.items():
+            text = text + "{} ".format(value) 
+        text = text+"\n"    
+    bot.send_message(chat_id=update.message.chat_id, text=text)
 
 
 caps_handler = CommandHandler('query', _query, pass_args=True)
