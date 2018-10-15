@@ -15,7 +15,7 @@ dispatcher = updater.dispatcher
 
 def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text="I'm a bot, please talk to me!")
+                     text="欢迎使用云悉机器人,请使用\help获取使用方法”)
 
 
 def _query(bot, update, args):
