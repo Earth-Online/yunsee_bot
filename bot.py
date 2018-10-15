@@ -15,8 +15,12 @@ dispatcher = updater.dispatcher
 
 def start(bot, update):
     bot.send_message(chat_id=update.message.chat_id,
-                     text="欢迎使用云悉机器人,请使用\help获取使用方法”)
+                     text='欢迎使用云悉机器人,请使用/help获取使用方法')
 
+def help(bot, update):
+    bot.send_message(chat_id=update.message.chat_id,
+                    text='使用/query <domain> 查询一个域名信息' 
+            )
 
 def _query(bot, update, args):
     if len(args) > 1:
@@ -31,6 +35,10 @@ dispatcher.add_handler(caps_handler)
 
 start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
+
+help_handler = CommandHandler('help', help)
+dispatcher.add_handler(help_handler)
+
 
 print("bot start")
 updater.start_polling()
