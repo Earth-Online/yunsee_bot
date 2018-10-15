@@ -1,6 +1,6 @@
 from telegram.ext import Updater
 from telegram.ext import CommandHandler
-from main import query
+from main import query,QueryException
 import logging
 import json
 import os
@@ -23,10 +23,14 @@ def help(bot, update):
             )
 
 def _query(bot, update, args):
-    if len(args) > 1:
-        bot.send_message(chat_id=update.message.chat_id, text='only one')
+    if len(args) != 1:
+        bot.send_message(chat_id=update.message.chat_id, text='命令格式 /query <domain>')
         return
-    ret = query(args[0])
+    try:
+        ret = query(args[0])
+    except QueryException as e:
+        bot.send_message(chat_id=update.message.chat_id, text='已推送云端检测，请几分钟后再查询')
+        return
     bot.send_message(chat_id=update.message.chat_id, text=json.dumps(ret))
 
 

@@ -16,6 +16,9 @@ headers = {
     'X-Requested-With': 'XMLHttpRequest'
 }
 
+class QueryException(Exception):
+    pass
+
 
 def start_requests():
     url = '{}/geetest?t={}'.format(domain, int(time.time()) * 1000)
@@ -53,7 +56,7 @@ def request_query(response, search_host):
 def parse_info(response):
     info = json.loads(response.text)
     if info["code"] != 2:
-        raise Exception("query error error info {}".format(info["mess"]))
+        raise QueryException("query error error info {}".format(info["mess"]))
     return info["res"]
 
 
